@@ -1,16 +1,21 @@
 
 # convert from Julia expression into NodeData form
 
-
-function expr_to_nodedata(ex::Expr,r::UserOperatorRegistry=UserOperatorRegistry())
-    global Precision_JuMP
+function expr_to_nodedata(ex::Expr,r::UserOperatorRegistry=UserOperatorRegistry();precision::Type{T}=Float64) where T <: Real
     nd = NodeData[]
-    values = Precision_JuMP[]
+    values = precision[]
     expr_to_nodedata(ex,nd,values,-1,r)
     return nd,values
 end
 
-function expr_to_nodedata(ex::Expr,nd::Vector{NodeData},values::Vector{Precision_JuMP},parentid,r::UserOperatorRegistry)
+# function expr_to_nodedata(ex::Expr,r::UserOperatorRegistry=UserOperatorRegistry())
+#     nd = NodeData[]
+#     values = Float64[]
+#     expr_to_nodedata(ex,nd,values,-1,r)
+#     return nd,values
+# end
+
+function expr_to_nodedata(ex::Expr,nd::Vector{NodeData},values::Vector{T},parentid,r::UserOperatorRegistry) where T <: Real
 
     myid = length(nd) + 1
     if isexpr(ex,:call)
@@ -53,7 +58,7 @@ function expr_to_nodedata(ex::Expr,nd::Vector{NodeData},values::Vector{Precision
     nothing
 end
 
-function expr_to_nodedata(ex::Number,nd::Vector{NodeData},values::Vector{Precision_JuMP},parentid,r::UserOperatorRegistry)
+function expr_to_nodedata(ex::Number,nd::Vector{NodeData},values::Vector{T},parentid,r::UserOperatorRegistry) where T <: Real
     valueidx = length(values)+1
     push!(values,ex)
     push!(nd, NodeData(VALUE, valueidx, parentid))

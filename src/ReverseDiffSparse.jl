@@ -11,7 +11,6 @@ using Compat.LinearAlgebra
 # using DecFP, Quadmath
 
 const TAG = :rds_tag
-const Precision_JuMP = Float64
 
 # Override basic math functions to return NaN instead of throwing errors.
 # This is what NLP solvers expect, and
