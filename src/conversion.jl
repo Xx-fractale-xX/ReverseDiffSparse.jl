@@ -3,13 +3,14 @@
 
 
 function expr_to_nodedata(ex::Expr,r::UserOperatorRegistry=UserOperatorRegistry())
+    global Precision_JuMP
     nd = NodeData[]
-    values = Float64[]
+    values = Precision_JuMP[]
     expr_to_nodedata(ex,nd,values,-1,r)
     return nd,values
 end
 
-function expr_to_nodedata(ex::Expr,nd::Vector{NodeData},values::Vector{Float64},parentid,r::UserOperatorRegistry)
+function expr_to_nodedata(ex::Expr,nd::Vector{NodeData},values::Vector{Precision_JuMP},parentid,r::UserOperatorRegistry)
 
     myid = length(nd) + 1
     if isexpr(ex,:call)
@@ -52,7 +53,7 @@ function expr_to_nodedata(ex::Expr,nd::Vector{NodeData},values::Vector{Float64},
     nothing
 end
 
-function expr_to_nodedata(ex::Number,nd::Vector{NodeData},values::Vector{Float64},parentid,r::UserOperatorRegistry)
+function expr_to_nodedata(ex::Number,nd::Vector{NodeData},values::Vector{Precision_JuMP},parentid,r::UserOperatorRegistry)
     valueidx = length(values)+1
     push!(values,ex)
     push!(nd, NodeData(VALUE, valueidx, parentid))
